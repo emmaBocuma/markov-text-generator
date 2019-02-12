@@ -1,0 +1,29 @@
+{
+  "name": "markov-text-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emmaBocuma/markov-text-generator.git"
+  },
+  "keywords": [
+    "markov",
+    "markov chain",
+    "random text generator",
+    "javascript"
+  ],
+  "author": "Emma Williams",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emmaBocuma/markov-text-generator/issues"
+  },
+  "homepage": "https://github.com/emmaBocuma/markov-text-generator#readme",
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "prettier": "^1.16.4"
+  }
+}
