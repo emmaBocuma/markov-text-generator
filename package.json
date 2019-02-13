@@ -2,9 +2,10 @@
   "name": "markov-text-generator",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require @babel/register",
+    "build": "webpack --config webpack.config.js"
   },
   "repository": {
     "type": "git",
@@ -13,7 +14,7 @@
   "keywords": [
     "markov",
     "markov chain",
-    "random text generator",
+    "random text",
     "javascript"
   ],
   "author": "Emma Williams",
@@ -23,7 +24,16 @@
   },
   "homepage": "https://github.com/emmaBocuma/markov-text-generator#readme",
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.0.0",
+    "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "prettier": "^1.16.4"
+  },
+  "dependencies": {
+    "seedrandom": "^2.4.4",
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3"
   }
 }

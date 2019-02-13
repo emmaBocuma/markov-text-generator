@@ -1,4 +1,5 @@
 import WordGram from "./WordGram.js";
+import seedrandom from "seedrandom";
 
 class MarkovTextGenerator {
   /**
@@ -11,8 +12,10 @@ class MarkovTextGenerator {
    * markov.generateText(50);
 
    */
-  constructor() {
-    this._order = 2;
+  constructor({ order, startWithSentenceCase, endWithPunctuation }) {
+    this._order = order || 2;
+    this._startWithSentenceCase = startWithSentenceCase || true;
+    this._endWithPunctuation = endWithPunctuation || true;
     this._textmap = new Map();
     this._srcWords = [];
   }
@@ -20,7 +23,7 @@ class MarkovTextGenerator {
   /**
    * Set training text for generator to build map of words.
    *
-   * @param {string} [words] A string of text content
+   * @param {string} [words] An array of words
    */
   setTrainingText(words) {
     this._srcWords = words;
@@ -41,7 +44,8 @@ class MarkovTextGenerator {
     }
   }
 
-  getRandomInt(max) {
+  getRandomInt(max, seed) {
+    Math.seedrandom(seed || null);
     return Math.floor(Math.random() * Math.floor(max));
   }
 
@@ -50,10 +54,11 @@ class MarkovTextGenerator {
     return firstChar.toUpperCase() === firstChar;
   }
   wordEndsSentence(word) {
-    const lastChar = word.substring(word.length - 1, 1);
+    const lastChar = word.substring(word.length - 1, word.length);
     if (["!", "?"].includes(lastChar)) {
       return true;
     }
+
     if (lastChar === "." && word.indexOf(".") === word.lastIndexOf(".")) {
       return true;
     }
@@ -67,7 +72,10 @@ class MarkovTextGenerator {
     while (true) {
       index = this.getRandomInt(this._srcWords.length - this._order);
       count++;
-      if (this.wordBeginsSentence(this._srcWords[index])) {
+      if (
+        this._startWithSentenceCase &&
+        this.wordBeginsSentence(this._srcWords[index])
+      ) {
         break;
       }
       if (count >= 1000) {
@@ -90,17 +98,36 @@ class MarkovTextGenerator {
     }
 
     let wordStart = new WordGram(src, 0, src.length);
+    let i = 0;
+    let count = 0;
 
-    for (let i = 0; i < numWords - this._order; i++) {
+    while (i < numWords - this._order) {
       const follows = this._textmap.get(wordStart.wordsToString());
       if (follows == null || follows.length == 0) {
         break;
       }
       index = this.getRandomInt(follows.length);
-      const newWord = follows[index];
-      str += newWord + " ";
+      let newWord = follows[index];
 
+      if (count >= 1000) {
+        // End search, and put fullstop at end of word
+        console.log(
+          "Couldn't find an end word, so added full stop to final attempt."
+        );
+        newWord += ".";
+      } else if (
+        i === numWords - (this._order + 1) &&
+        this._endWithPunctuation &&
+        !this.wordEndsSentence(newWord)
+      ) {
+        str += newWord + " ";
+        wordStart = wordStart.shiftAdd(newWord);
+        count++;
+        continue;
+      }
+      str += newWord + " ";
       wordStart = wordStart.shiftAdd(newWord);
+      i++;
     }
 
     return str;

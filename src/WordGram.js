@@ -19,7 +19,7 @@ class WordGram {
     for (let word of this.srcWords) {
       str += word + " ";
     }
-    return str;
+    return str.trim();
   }
 
   shiftAdd(word) {
