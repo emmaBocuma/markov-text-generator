@@ -3,14 +3,19 @@ import seedrandom from "seedrandom";
 
 class MarkovTextGenerator {
   /**
-   * Markov Text Generator. 
+   * Markov Text Generator.
    *
+   * @constructor
+   * @param {Object[]} obj
+   * @param {number} [obj.order=2] Markov order.
+   * @param {boolean} [obj.startWithSentenceCase=true] Whether first word in generated text should start with uppercase letter.
+   * @param {boolean} [obj.endWithPunctuation=true] Whether last word in generated text should end with punctuation
+   * NB. if set to true, the number of generated words may equal more than number sent to generateText() method.
    * @example
    * import MarkovTextGenerator from "./markov.js";
    * const markov = new MarkovTextGenerator();
-   * markov.setTrainingText("text string goes here");
+   * markov.setTrainingText("a long text string goes here");
    * markov.generateText(50);
-
    */
   constructor({ order, startWithSentenceCase, endWithPunctuation }) {
     this._order = order || 2;
@@ -22,11 +27,21 @@ class MarkovTextGenerator {
 
   /**
    * Set training text for generator to build map of words.
-   *
-   * @param {string} [words] An array of words
+   * @param {string} words An string of text
+   * @param {Function} customFn A custom filter function
+   * @example
+   * // Removing links
+   * setTrainingText(myString, function(word) {
+   *       return word.indexOf("http") === -1;
+   * });
    */
-  setTrainingText(words) {
-    this._srcWords = words;
+  setTrainingText(words, customFn) {
+    this._srcWords = words.split(/\s+/g).filter(
+      customFn ||
+        function() {
+          return true;
+        }
+    );
     this.buildMap();
   }
 
@@ -50,7 +65,15 @@ class MarkovTextGenerator {
   }
 
   wordBeginsSentence(word) {
+    if (word.length < 2) {
+      return false;
+    }
     const firstChar = word.substring(0, 1);
+    const lastChar = word.substring(word.length - 1, word.length);
+    const punc = ["!", "?", "&", '"', ".", "(", ")"];
+    if (punc.includes(firstChar) || punc.includes(lastChar)) {
+      return false;
+    }
     return firstChar.toUpperCase() === firstChar;
   }
   wordEndsSentence(word) {
@@ -86,7 +109,11 @@ class MarkovTextGenerator {
     }
     return index;
   }
-
+  /**
+   * Generate text based on training data
+   * @param {number} numWords Number of words to be returned.
+   * @return {string} A string of generated words.
+   */
   generateText(numWords) {
     let str = "";
     let src = [];

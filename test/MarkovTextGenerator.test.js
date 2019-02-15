@@ -17,8 +17,11 @@ describe("MarkovTextGenerator tests", () => {
     it("should return true when word starts with uppercase letter", () => {
       assert.equal(markov.wordBeginsSentence("Hello"), true);
     });
-    it("should return true when word starts with uppercase letter", () => {
+    it("should return true when word ends with fullstop", () => {
       assert.equal(markov.wordEndsSentence("end."), true);
+    });
+    it("should return false if word is acronym", () => {
+      assert.equal(markov.wordEndsSentence("U.S."), false);
     });
   });
 
@@ -45,28 +48,13 @@ describe("MarkovTextGenerator tests", () => {
 
   describe("getFirstWordIndex method", () => {
     it("should return 4 if finds first word index before end of string (minus order number)", () => {
-      let str = [
-        "the",
-        "fox",
-        "jumps",
-        "over",
-        "Start",
-        "sentence",
-        "continues"
-      ];
+      let str = "the fox jumps over Start sentence continues";
+
       markov.setTrainingText(str);
       assert.equal(markov.getFirstWordIndex(), 4);
     });
     it("should throw error if cannot find word starting with uppercase letter within reasonable num of tries", () => {
-      let str = [
-        "the",
-        "fox",
-        "jumps",
-        "over",
-        "start",
-        "sentence",
-        "continues"
-      ];
+      let str = "the fox jumps over start sentence continues";
       markov.setTrainingText(str);
       expect(markov.getFirstWordIndex).to.throw();
     });

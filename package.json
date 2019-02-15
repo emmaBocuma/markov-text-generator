@@ -2,7 +2,7 @@
   "name": "markov-text-generator",
   "version": "1.0.0",
   "description": "",
-  "main": "lib/index.js",
+  "main": "lib/bundle.js",
   "scripts": {
     "test": "mocha --require @babel/register",
     "build": "webpack --config webpack.config.js"
