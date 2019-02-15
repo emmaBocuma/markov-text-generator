@@ -15,19 +15,12 @@ class WordGram {
   }
 
   wordsToString() {
-    let str = "";
-    for (let word of this.srcWords) {
-      str += word + " ";
-    }
-    return str.trim();
+    return this.srcWords.join(" ");
   }
 
   shiftAdd(word) {
-    let shiftedWords = [];
-    for (let i = 0; i < this.srcWords.length - 1; i++) {
-      shiftedWords[i] = this.srcWords[i + 1];
-    }
-    shiftedWords[this.srcWords.length - 1] = word;
+    let shiftedWords = this.srcWords.slice(1);
+    shiftedWords.push(word);
     return new WordGram(shiftedWords, 0, this.srcWords.length);
   }
 }

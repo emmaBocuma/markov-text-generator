@@ -1,2 +1,9 @@
+# Node
 node_modules
+
+# Bundled code
 lib
+
+# Test coverage
+.nyc_output
+coverage

@@ -6,42 +6,45 @@ class MarkovTextGenerator {
    * Markov Text Generator.
    *
    * @constructor
-   * @param {Object[]} obj
-   * @param {number} [obj.order=2] Markov order.
-   * @param {boolean} [obj.startWithSentenceCase=true] Whether first word in generated text should start with uppercase letter.
-   * @param {boolean} [obj.endWithPunctuation=true] Whether last word in generated text should end with punctuation
+   * @param {Object[]} options
+   * @param {number} [options.order=2] Markov order.
+   * @param {boolean} [options.startWithSentenceCase=true] Whether first word in generated text should start with uppercase letter.
+   * @param {boolean} [options.endWithPunctuation=true] Whether last word in generated text should end with punctuation
+   * @param {Function} customFilterFn A custom filter function to remove unwanted words
    * NB. if set to true, the number of generated words may equal more than number sent to generateText() method.
    * @example
    * import MarkovTextGenerator from "./markov.js";
-   * const markov = new MarkovTextGenerator();
+   * const markov = new MarkovTextGenerator({
+   *  order = 2,
+   *  startWithSentenceCase = true,
+   *  endWithPunctuation = false,
+   *  customFilterFn = function(word) {return word.indexOf("http") === -1;}
+   * });
    * markov.setTrainingText("a long text string goes here");
    * markov.generateText(50);
    */
-  constructor({ order, startWithSentenceCase, endWithPunctuation }) {
-    this._order = order || 2;
-    this._startWithSentenceCase = startWithSentenceCase || true;
-    this._endWithPunctuation = endWithPunctuation || true;
+  constructor({
+    order = 2,
+    startWithSentenceCase = true,
+    endWithPunctuation = true,
+    customFilterFn = function() {
+      return true;
+    }
+  }) {
+    this._order = order;
+    this._startWithSentenceCase = startWithSentenceCase;
+    this._endWithPunctuation = endWithPunctuation;
     this._textmap = new Map();
     this._srcWords = [];
+    this._filterFunction = customFilterFn;
   }
 
   /**
    * Set training text for generator to build map of words.
    * @param {string} words An string of text
-   * @param {Function} customFn A custom filter function
-   * @example
-   * // Removing links
-   * setTrainingText(myString, function(word) {
-   *       return word.indexOf("http") === -1;
-   * });
    */
-  setTrainingText(words, customFn) {
-    this._srcWords = words.split(/\s+/g).filter(
-      customFn ||
-        function() {
-          return true;
-        }
-    );
+  setTrainingText(words) {
+    this._srcWords = words.split(/\s+/g);
     this.buildMap();
   }
 
