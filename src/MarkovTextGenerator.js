@@ -1,4 +1,4 @@
-import WordGram from "./WordGram.js";
+import NGram from "./NGram.js";
 import seedrandom from "seedrandom";
 
 class MarkovTextGenerator {
@@ -52,7 +52,7 @@ class MarkovTextGenerator {
     this._textmap.clear();
 
     for (let i = 0; i < this._srcWords.length - (this._order - 1); i++) {
-      let wordGram = new WordGram(this._srcWords, i, this._order);
+      let wordGram = new NGram(this._srcWords, i, this._order);
       if (!this._textmap.has(wordGram.wordsToString())) {
         this._textmap.set(
           wordGram.wordsToString(),
@@ -127,7 +127,7 @@ class MarkovTextGenerator {
       str += src[i] + " ";
     }
 
-    let wordStart = new WordGram(src, 0, src.length);
+    let wordStart = new NGram(src, 0, src.length);
     let i = 0;
     let count = 0;
 

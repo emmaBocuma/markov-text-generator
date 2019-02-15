@@ -1,5 +1,5 @@
 import MarkovTextGenerator from "../src/MarkovTextGenerator.js";
-import WordGram from "../src/WordGram.js";
+import NGram from "../src/NGram.js";
 import assert from "assert";
 import { expect } from "chai";
 
@@ -27,18 +27,18 @@ describe("MarkovTextGenerator tests", () => {
 
   describe("indexOf method", () => {
     it("should return -1 if words not matched", () => {
-      let wordGram = new WordGram(["Test", "this"], 0, 2);
+      let wordGram = new NGram(["Test", "this"], 0, 2);
       assert.equal(markov.indexOf(["Hello", "world", "test"], wordGram, 0), -1);
     });
     it("should return 2 if words matched", () => {
-      let wordGram = new WordGram(["Test", "this"], 0, 2);
+      let wordGram = new NGram(["Test", "this"], 0, 2);
       assert.equal(
         markov.indexOf(["Hello", "world", "Test", "this"], wordGram, 0),
         2
       );
     });
     it("should return -1 if matching words included, but before start index", () => {
-      let wordGram = new WordGram(["Test", "this"], 0, 2);
+      let wordGram = new NGram(["Test", "this"], 0, 2);
       assert.equal(
         markov.indexOf(["Test", "this", "Hello", "world"], wordGram, 2),
         -1

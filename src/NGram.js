@@ -1,4 +1,4 @@
-class WordGram {
+class NGram {
   constructor(srcWords, start, size) {
     this.srcWords = srcWords.slice(start, start + size);
   }
@@ -21,8 +21,8 @@ class WordGram {
   shiftAdd(word) {
     let shiftedWords = this.srcWords.slice(1);
     shiftedWords.push(word);
-    return new WordGram(shiftedWords, 0, this.srcWords.length);
+    return new NGram(shiftedWords, 0, this.srcWords.length);
   }
 }
 
-export default WordGram;
+export default NGram;
