@@ -1,8 +1,9 @@
 # Node
 node_modules
 
-# Bundled code
-lib
+# Build code
+commonjs
+esm
 
 # Test coverage
 .nyc_output

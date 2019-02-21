@@ -41,11 +41,13 @@ class MarkovTextGenerator {
 
   /**
    * Set training text for generator to build map of words.
-   * @param {string} words An string of text
+   * @param {string} words A string of source text
    */
   setTrainingText(words) {
-    this._srcWords = words.split(/\s+/g);
-    this.buildMap();
+    this._srcWords = words.split(/\s+/g).filter(this._filterFunction);
+    if (this._order > 0) {
+      this.buildMap();
+    }
   }
 
   buildMap() {
@@ -53,38 +55,35 @@ class MarkovTextGenerator {
 
     for (let i = 0; i < this._srcWords.length - (this._order - 1); i++) {
       let wordGram = new NGram(this._srcWords, i, this._order);
-      if (!this._textmap.has(wordGram.wordsToString())) {
-        this._textmap.set(
-          wordGram.wordsToString(),
-          this.getFollowingWords(wordGram)
-        );
+      let words = wordGram.wordsToString();
+
+      if (!this._textmap.has(words)) {
+        this._textmap.set(words, this.getFollowingWords(wordGram));
       }
     }
   }
 
-  getRandomInt(max, seed) {
-    Math.seedrandom(seed || null);
+  getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
   }
 
   wordBeginsSentence(word) {
-    if (word.length < 2) {
-      return false;
-    }
     const firstChar = word.substring(0, 1);
     const lastChar = word.substring(word.length - 1, word.length);
-    const punc = ["!", "?", "&", '"', ".", "(", ")"];
-    if (punc.includes(firstChar) || punc.includes(lastChar)) {
+    const regexUpper = /[A-Z]/;
+    const regexPunctuation = /[!-.:-@[-`{-~‘-”]/;
+
+    if (!firstChar.match(regexUpper) || lastChar.match(regexPunctuation)) {
       return false;
     }
-    return firstChar.toUpperCase() === firstChar;
+    return true;
   }
   wordEndsSentence(word) {
     const lastChar = word.substring(word.length - 1, word.length);
     if (["!", "?"].includes(lastChar)) {
       return true;
     }
-
+    // Check not acronym ie. more than one period
     if (lastChar === "." && word.indexOf(".") === word.lastIndexOf(".")) {
       return true;
     }
@@ -127,11 +126,16 @@ class MarkovTextGenerator {
       str += src[i] + " ";
     }
 
+    if (this._order === 0) {
+      return this.returnAllRandom(str, numWords);
+    }
+
     let wordStart = new NGram(src, 0, src.length);
     let i = 0;
     let count = 0;
 
     while (i < numWords - this._order) {
+      // const follows = this._textmap[wordStart.wordsToString()];
       const follows = this._textmap.get(wordStart.wordsToString());
       if (follows == null || follows.length == 0) {
         break;
@@ -160,7 +164,22 @@ class MarkovTextGenerator {
       i++;
     }
 
+    return str.trim();
+  }
+
+  returnAllRandom(startString, numWords) {
+    let str = startString;
+    for (let i = 0; i < numWords; i++) {
+      let index = this.getRandomInt(this._srcWords.length);
+      str += this._srcWords[index] + " ";
+    }
+    console.log(this._srcWords);
     return str;
+  }
+
+  setSeed(num) {
+    this.seed = num;
+    Math.seedrandom(this.seed);
   }
 
   getFollowingWords(wordGram) {
