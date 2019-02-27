@@ -1,40 +1,44 @@
 {
-  "name": "markov-text-generator",
-  "version": "1.0.0",
-  "description": "",
-  "main": "commonjs/MarkovTextGenerator.js",
-  "module": "esm/MarkovTextGenerator.js",
-  "scripts": {
-    "test": "mocha --require @babel/register",
-    "build-commonjs": "BABEL_ENV=commonjs babel src --out-dir commonjs",
-    "build-esm": "BABEL_ENV=esm babel src --out-dir esm"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/emmaBocuma/markov-text-generator.git"
-  },
-  "keywords": [
-    "markov",
-    "markov chain",
-    "text generator",
-    "javascript"
-  ],
-  "author": "Emma Williams",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/emmaBocuma/markov-text-generator/issues"
-  },
-  "homepage": "https://github.com/emmaBocuma/markov-text-generator#readme",
-  "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/register": "^7.0.0",
-    "chai": "^4.2.0",
-    "mocha": "^5.2.0",
-    "prettier": "^1.16.4"
-  },
-  "dependencies": {
-    "seedrandom": "^2.4.4"
-  }
+	"name": "markov-text-generator",
+	"version": "1.0.0",
+	"description": "",
+	"main": "commonjs/MarkovTextGenerator.js",
+	"module": "esm/MarkovTextGenerator.js",
+	"scripts": {
+		"test": "mocha --require @babel/register",
+		"build-commonjs": "BABEL_ENV=commonjs babel src --out-dir commonjs",
+		"build-esm": "BABEL_ENV=esm babel src --out-dir esm"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/emmaBocuma/markov-text-generator.git"
+	},
+	"keywords": [
+		"markov",
+		"markov chain",
+		"text generator",
+		"javascript"
+	],
+	"files": [
+		"commonjs",
+		"esm"
+	],
+	"author": "Emma Williams",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/emmaBocuma/markov-text-generator/issues"
+	},
+	"homepage": "https://github.com/emmaBocuma/markov-text-generator#readme",
+	"devDependencies": {
+		"@babel/cli": "^7.2.3",
+		"@babel/core": "^7.2.2",
+		"@babel/preset-env": "^7.3.1",
+		"@babel/register": "^7.0.0",
+		"chai": "^4.2.0",
+		"mocha": "^5.2.0",
+		"prettier": "^1.16.4"
+	},
+	"dependencies": {
+		"seedrandom": "^2.4.4"
+	}
 }

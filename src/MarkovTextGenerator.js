@@ -28,7 +28,7 @@ class MarkovTextGenerator {
 		order = 2,
 		options = {
 			startWithSentenceCase: true,
-			endWithPunctuation: true,
+			endWithPunctuation: false,
 			filterFunction: function() {
 				return true;
 			}

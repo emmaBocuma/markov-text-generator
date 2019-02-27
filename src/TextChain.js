@@ -30,16 +30,37 @@ class TextChain {
 
 			// If at final state and must end with punctuation
 			if (this._endWithPunctuation && i === numWords - (this._order + 1)) {
-				if (count >= 1000) {
+				if (count >= 20) {
 					console.log(
-						"Couldn't find end of sentence in 1000 tries, so added full stop to final attempt."
+						"Reached maximum extra words allowed to end text with punctuation, so added full stop to final attempt."
 					);
 					str += `${nextState}.`;
 					break;
 				}
 				if (!this._wordEndsSentence(nextState)) {
-					count++;
-					continue;
+					// If random final word doesn't end in punctuation,
+					// then iterate through each possible state to find word that does
+					let finalWordFound = false;
+
+					for (const word of nextStates) {
+						if (this._wordEndsSentence(word)) {
+							finalWordFound = true;
+							str += word;
+							break;
+						}
+					}
+
+					if (finalWordFound) {
+						break;
+					}
+
+					if (!finalWordFound) {
+						// Nothing found then add word and continue to next round
+						str += `${nextState} `;
+						currState = currState.shiftAdd(nextState);
+						count++;
+						continue;
+					}
 				}
 			}
 

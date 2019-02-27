@@ -16,14 +16,14 @@ describe("TextChain tests", () => {
 		map.set("had a", ["beautiful", "lovely"]);
 		map.set("a beautiful", ["ball", "flower"]);
 		map.set("a lovely", ["time", "party"]);
-		map.set("lovely time", ["again"]);
-		map.set("beautiful time", ["again"]);
-		map.set("lovely ball", ["again"]);
-		map.set("beautiful ball", ["again"]);
-		map.set("lovely party", ["again"]);
-		map.set("beautiful party", ["again"]);
-		map.set("lovely flower", ["again"]);
-		map.set("beautiful flower", ["again"]);
+		map.set("lovely time", ["again."]);
+		map.set("beautiful time", ["again."]);
+		map.set("lovely ball", ["again."]);
+		map.set("beautiful ball", ["again."]);
+		map.set("lovely party", ["again."]);
+		map.set("beautiful party", ["again."]);
+		map.set("lovely flower", ["again."]);
+		map.set("beautiful flower", ["again."]);
 
 		textChain = new TextChain(map, true, false, 2);
 	});
@@ -68,8 +68,8 @@ describe("TextChain tests", () => {
 		});
 		it("should generate matching text with full stop", () => {
 			textChain = new TextChain(map, true, true, 2);
-			expect(textChain.generate(7)).to.equal(
-				"A certain king had a beautiful flower."
+			expect(textChain.generate(5)).to.equal(
+				"A certain king had a beautiful flower again."
 			);
 		});
 	});
