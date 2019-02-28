@@ -7,7 +7,9 @@ describe("NGramStates tests", () => {
 	let testString =
 		"A certain king had a beautiful garden, and in the garden stood a tree which bore golden apples. A certain queen had a beautiful garden, and in the garden stood a tree which bore red cherries.";
 	beforeEach("init NGramStates", () => {
-		nGramStates = new NGramStates(testString, 2, () => true);
+		nGramStates = new NGramStates(testString, 2, {
+			filterFunction: () => true
+		});
 	});
 	it("should return correct map values for key", () => {
 		const ngramStates = nGramStates.getNGramStates();
@@ -34,5 +36,57 @@ describe("NGramStates tests", () => {
 		const nGram = new NGram(testString.split(" "), 21, 2);
 		const index = nGramStates._indexOf(testString.split(" "), nGram, 5);
 		expect(index).to.equal(21);
+	});
+
+	it("should filter out words correctly, order 1", () => {
+		const removeWords = ["garden", "stood", "beautiful"];
+		nGramStates = new NGramStates(testString, 1, {
+			filterFunction: word => {
+				if (removeWords.includes(word)) {
+					return false;
+				}
+				return true;
+			}
+		});
+
+		expect(nGramStates.getNGramStates().get("garden")).to.equal(undefined);
+		expect(nGramStates.getNGramStates().get("stood")).to.equal(undefined);
+		expect(nGramStates.getNGramStates().get("tree")).to.deep.equal([
+			"which",
+			"which"
+		]);
+	});
+
+	it("should filter out words correctly, order 2", () => {
+		const removeWords = ["garden", "stood", "beautiful"];
+		nGramStates = new NGramStates(testString, 2, {
+			filterFunction: word => {
+				if (removeWords.includes(word)) {
+					return false;
+				}
+				return true;
+			}
+		});
+
+		expect(nGramStates.getNGramStates().get("garden")).to.equal(undefined);
+		expect(nGramStates.getNGramStates().get("stood")).to.equal(undefined);
+		expect(nGramStates.getNGramStates().get("a tree")).to.deep.equal([
+			"which",
+			"which"
+		]);
+	});
+
+	it("should filter out words correctly, that include e", () => {
+		nGramStates = new NGramStates(testString, 1, {
+			filterFunction: word => {
+				if (word.indexOf("e") > -1) {
+					return false;
+				}
+				return true;
+			}
+		});
+
+		expect(nGramStates.getNGramStates().get("garden")).to.equal(undefined);
+		expect(nGramStates.getNGramStates().get("stood")).to.deep.equal(["a", "a"]);
 	});
 });

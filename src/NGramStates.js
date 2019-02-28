@@ -1,13 +1,8 @@
 import NGram from "./NGram.js";
 
 class NGramStates {
-	constructor(text, order, filterFn) {
-		this._trainingText = text.split(/\s+/g).filter(
-			filterFn ||
-				function() {
-					return true;
-				}
-		);
+	constructor(text, order, options) {
+		this._trainingText = text.split(/\s+/g).filter(options.filterFunction);
 		this._textmap = new Map();
 		this._order = order;
 		this._buildStates();
@@ -28,6 +23,8 @@ class NGramStates {
 				this._textmap.set(words, this._getFollowingWords(nGram));
 			}
 		}
+
+		//	console.log(this._textmap);
 	}
 
 	_getFollowingWords(nGram) {

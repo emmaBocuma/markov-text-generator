@@ -25,7 +25,10 @@ describe("TextChain tests", () => {
 		map.set("lovely flower", ["again."]);
 		map.set("beautiful flower", ["again."]);
 
-		textChain = new TextChain(map, true, false, 2);
+		textChain = new TextChain(map, 2, {
+			startAsSentence: true,
+			endAsSentence: false
+		});
 	});
 
 	describe("_getInitialNGram() tests", () => {
@@ -67,7 +70,10 @@ describe("TextChain tests", () => {
 			);
 		});
 		it("should generate matching text with full stop", () => {
-			textChain = new TextChain(map, true, true, 2);
+			textChain = new TextChain(map, 2, {
+				startAsSentence: true,
+				endAsSentence: true
+			});
 			expect(textChain.generate(5)).to.equal(
 				"A certain king had a beautiful flower again."
 			);

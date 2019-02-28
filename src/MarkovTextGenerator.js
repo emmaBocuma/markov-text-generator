@@ -2,49 +2,65 @@ import NGramStates from "./NGramStates.js";
 import TextChain from "./TextChain.js";
 import seedrandom from "seedrandom";
 
+const defaultOptions = {
+	startAsSentence: true,
+	endAsSentence: false,
+	filterFunction: word => true
+};
+
 class MarkovTextGenerator {
 	/**
 	 * Markov Text Generator.
 	 *
 	 * @constructor
-	 * @param {Object[]} options
 	 * @param {number} [order=2] Markov order.
-	 * @param {boolean} [options.startWithSentenceCase=true] Whether first word in generated text should start with uppercase letter.
-	 * @param {boolean} [options.endWithPunctuation=true] Whether last word in generated text should end with punctuation
-	 * @param {Function} customFilterFn A custom filter function to remove unwanted words
+	 * @param {Object[]} options
+	 * @param {boolean} [options.startAsSentence=true] Whether first word in generated text should start with uppercase letter.
+	 * @param {boolean} [options.endAsSentence=true] Whether last word in generated text should end with punctuation.
 	 * NB. if set to true, the number of generated words may equal more than number sent to generateText() method.
+	 * @param {Function} [options.filterFunction] A custom filter function to remove unwanted words.
 	 * @example
 	 * import MarkovTextGenerator from "./markov.js";
 	 * const options = {
-	 *  startWithSentenceCase: true,
-	 *  endWithPunctuation: false,
-	 *  filterFn: function(word) {return word.indexOf("http") === -1;}
+	 *  startAsSentence: true,
+	 *  endAsSentence: false,
+	 *  filterFunction: word => word.indexOf("http") === -1
 	 * };
 	 * const markov = new MarkovTextGenerator(2, options);
 	 * markov.setTrainingText("a long text string goes here");
 	 * markov.generateText(50);
 	 */
-	constructor(
-		order = 2,
-		options = {
-			startWithSentenceCase: true,
-			endWithPunctuation: false,
-			filterFunction: function() {
-				return true;
-			}
-		}
-	) {
+
+	constructor(order = 2, options = defaultOptions) {
 		this._options = options;
 		this._order = order;
 		this.textChain = {};
 		this.nGramStates = {};
-		this.checkParams();
+		this._validateParams();
 	}
 
-	checkParams() {
-		if (typeof this._order !== "number" || this._order < 0) {
+	_validateParams() {
+		if (typeof this._order !== "number" || this._order < 1) {
 			throw new TypeError(
 				"MarkovTextGenerator constructor: order parameter must be a positive number"
+			);
+		}
+
+		if (
+			this._options.filterFunction &&
+			typeof this._options.filterFunction !== "function"
+		) {
+			throw new TypeError(
+				"MarkovTextGenerator constructor: filterFunction must be a Function"
+			);
+		}
+
+		if (
+			this._options.filterFunction &&
+			typeof this._options.filterFunction("test") !== "boolean"
+		) {
+			throw new TypeError(
+				"MarkovTextGenerator constructor: filterFunction must return a boolean"
 			);
 		}
 	}
@@ -54,16 +70,14 @@ class MarkovTextGenerator {
 	 * @param {string} words A string of source text
 	 */
 	setTrainingText(text) {
-		this.nGramStates = new NGramStates(
-			text,
-			this._order,
-			this._options.filterFunction
-		);
+		if (!this._options.filterFunction) {
+			this._options.filterFunction = defaultOptions.filterFunction;
+		}
+		this.nGramStates = new NGramStates(text, this._order, this._options);
 		this.textChain = new TextChain(
 			this.nGramStates.getNGramStates(),
-			this._options.startWithSentenceCase,
-			this._options.endWithPunctuation,
-			this._order
+			this._order,
+			this._options
 		);
 	}
 

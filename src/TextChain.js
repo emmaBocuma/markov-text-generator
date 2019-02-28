@@ -1,20 +1,16 @@
 import NGram from "./NGram.js";
 
 class TextChain {
-	constructor(nGramStates, startWithSentenceCase, endWithPunctuation, order) {
+	constructor(nGramStates, order, options) {
 		this._nGramStates = nGramStates;
-		this._startWithSentenceCase = startWithSentenceCase;
-		this._endWithPunctuation = endWithPunctuation;
+		this._startAsSentence = options.startAsSentence;
+		this._endAsSentence = options.endAsSentence;
 		this._order = order;
 	}
 
 	generate(numWords) {
 		let initialNGram = this._getInitialNGram();
 		let str = `${initialNGram} `;
-
-		if (this._order === 0) {
-			return this._returnAllRandom(str, numWords);
-		}
 
 		let i = 0;
 		let count = 0;
@@ -28,8 +24,8 @@ class TextChain {
 			let index = this._getRandomInt(nextStates.length);
 			let nextState = nextStates[index];
 
-			// If at final state and must end with punctuation
-			if (this._endWithPunctuation && i === numWords - (this._order + 1)) {
+			// If at final state, and must end with punctuation
+			if (this._endAsSentence && i === numWords - (this._order + 1)) {
 				if (count >= 20) {
 					console.log(
 						"Reached maximum extra words allowed to end text with punctuation, so added full stop to final attempt."
@@ -72,15 +68,6 @@ class TextChain {
 		return str.trim();
 	}
 
-	_returnAllRandom(startString, numWords) {
-		let str = startString;
-		for (let i = 0; i < numWords; i++) {
-			let index = this._getRandomInt(this._srcWords.length);
-			str += this._srcWords[index] + " ";
-		}
-		return str;
-	}
-
 	_nGramBeginsSentence(nGramKey) {
 		const firstChar = nGramKey.substring(0, 1);
 		const lastChar = nGramKey.substring(nGramKey.length - 1, nGramKey.length);
@@ -119,7 +106,7 @@ class TextChain {
 			index = this._getRandomInt(this._nGramStates.size);
 			nGramKey = keys[index];
 
-			if (!this._startWithSentenceCase) {
+			if (!this._startAsSentence) {
 				break;
 			}
 			if (this._nGramBeginsSentence(nGramKey)) {
