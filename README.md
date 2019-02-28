@@ -1,6 +1,8 @@
 # markov-text-generator
 A Markov chain based text generator.
 
+[![Build Status](https://travis-ci.org/emmaBocuma/markov-text-generator.svg?branch=master)](https://travis-ci.org/emmaBocuma/markov-text-generator)
+
 ## Installation
 
     npm install markov-text-generator
