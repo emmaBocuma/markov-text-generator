@@ -1,5 +1,6 @@
 # markov-text-generator
 A Markov chain based text generator.
+See this [Medium article](https://medium.com/@emmabocuma/using-markov-to-tweet-like-trump-part-1-the-set-up-43d567826bef) about Markov chains and building the library.
 
 [![Build Status](https://travis-ci.org/emmaBocuma/markov-text-generator.svg?branch=master)](https://travis-ci.org/emmaBocuma/markov-text-generator)
 
