@@ -1,8 +1,62 @@
-import NGramStates from "../src/NGramStates.js";
+import NGramStates, {
+	indexOfNgram,
+	getFollowingWords
+} from "../src/NGramStates.js";
 import NGram from "../src/NGram.js";
 import { expect } from "chai";
 
-describe("NGramStates tests", () => {
+describe("NGramStates unit tests", () => {
+	it("should return correct integer for indexOfNgram()", () => {
+		const source = ["Once", "upon", "a", "time", "there", "lived"];
+		let index = indexOfNgram(source, new NGram(["upon", "a"]));
+		expect(index).to.equal(1);
+		index = indexOfNgram(source, new NGram(["lived", "a"]));
+		expect(index).to.equal(-1);
+		index = indexOfNgram(source, new NGram(["upon", "a"]), 2);
+		expect(index).to.equal(-1);
+	});
+
+	it("should return correct words for getFollowingWords()", () => {
+		const source = ["Once", "upon", "a", "time", "there", "lived"];
+		let words = getFollowingWords(source, new NGram(["upon", "a"]));
+		expect(words).to.deep.equal(["time"]);
+		words = getFollowingWords(source, new NGram(["lived"]));
+		expect(words).to.deep.equal([]);
+		const dupeSource = [
+			"Once",
+			"upon",
+			"a",
+			"time",
+			"there",
+			"lived",
+			"Once",
+			"upon",
+			"a",
+			"time",
+			"there",
+			"was"
+		];
+		words = getFollowingWords(dupeSource, new NGram(["time", "there"]));
+		expect(words).to.deep.equal(["lived", "was"]);
+
+		let testString =
+			"A certain king had a beautiful garden, and in the garden stood a tree which bore golden apples. A certain queen had a beautiful garden, and in the garden stood a tree which bore red cherries.";
+
+		words = getFollowingWords(
+			testString.split(" "),
+			new NGram(["a", "beautiful"])
+		);
+		expect(words).to.deep.equal(["garden,", "garden,"]);
+
+		words = getFollowingWords(testString.split(" "), new NGram(["which"]));
+		expect(words).to.deep.equal(["bore", "bore"]);
+
+		words = getFollowingWords(testString.split(" "), new NGram(["cherries."]));
+		expect(words).to.deep.equal([]);
+	});
+});
+
+describe("NGramStates building ngram dictionary tests", () => {
 	let nGramStates = {};
 	let testString =
 		"A certain king had a beautiful garden, and in the garden stood a tree which bore golden apples. A certain queen had a beautiful garden, and in the garden stood a tree which bore red cherries.";
@@ -20,22 +74,9 @@ describe("NGramStates tests", () => {
 		]);
 		expect(ngramStates.get("bore red")).to.deep.equal(["cherries."]);
 	});
-
 	it("should return no map values", () => {
 		const ngramStates = nGramStates.getNGramStates();
 		expect(ngramStates.get("red cherries.")).to.deep.equal([]);
-	});
-
-	it("should return correct follow words array", () => {
-		const nGram = new NGram(testString.split(" "), 1, 2);
-		const words = nGramStates._getFollowingWords(nGram);
-		expect(words).to.deep.equal(["had"]);
-	});
-
-	it("should return correct integer for _indexOf", () => {
-		const nGram = new NGram(testString.split(" "), 21, 2);
-		const index = nGramStates._indexOf(testString.split(" "), nGram, 5);
-		expect(index).to.equal(21);
 	});
 
 	it("should filter out words correctly, order 1", () => {
@@ -48,7 +89,6 @@ describe("NGramStates tests", () => {
 				return true;
 			}
 		});
-
 		expect(nGramStates.getNGramStates().get("garden")).to.equal(undefined);
 		expect(nGramStates.getNGramStates().get("stood")).to.equal(undefined);
 		expect(nGramStates.getNGramStates().get("tree")).to.deep.equal([
@@ -56,7 +96,6 @@ describe("NGramStates tests", () => {
 			"which"
 		]);
 	});
-
 	it("should filter out words correctly, order 2", () => {
 		const removeWords = ["garden", "stood", "beautiful"];
 		nGramStates = new NGramStates(testString, 2, {
@@ -67,7 +106,6 @@ describe("NGramStates tests", () => {
 				return true;
 			}
 		});
-
 		expect(nGramStates.getNGramStates().get("garden")).to.equal(undefined);
 		expect(nGramStates.getNGramStates().get("stood")).to.equal(undefined);
 		expect(nGramStates.getNGramStates().get("a tree")).to.deep.equal([
@@ -75,7 +113,6 @@ describe("NGramStates tests", () => {
 			"which"
 		]);
 	});
-
 	it("should filter out words correctly, that include e", () => {
 		nGramStates = new NGramStates(testString, 1, {
 			filterFunction: word => {
@@ -85,7 +122,6 @@ describe("NGramStates tests", () => {
 				return true;
 			}
 		});
-
 		expect(nGramStates.getNGramStates().get("garden")).to.equal(undefined);
 		expect(nGramStates.getNGramStates().get("stood")).to.deep.equal(["a", "a"]);
 	});

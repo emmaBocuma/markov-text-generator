@@ -1,6 +1,6 @@
 class NGram {
 	constructor(srcWords, start, size) {
-		this.srcWords = srcWords.slice(start, start + size);
+		this.srcWords = srcWords;
 	}
 
 	wordAt(ind) {
@@ -10,7 +10,7 @@ class NGram {
 		return this.srcWords[ind];
 	}
 
-	length() {
+	get length() {
 		return this.srcWords.length;
 	}
 

@@ -62,7 +62,7 @@ describe("TextChain tests", () => {
 	});
 	describe("generate() tests", () => {
 		beforeEach("", () => {
-			Math.seedrandom("hello");
+			seedrandom("hello", { global: true });
 		});
 		it("should generate matching text", () => {
 			expect(textChain.generate(7)).to.equal(

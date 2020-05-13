@@ -7,7 +7,8 @@
 	"scripts": {
 		"test": "mocha --require @babel/register",
 		"build-commonjs": "BABEL_ENV=commonjs babel src --out-dir commonjs",
-		"build-esm": "BABEL_ENV=esm babel src --out-dir esm"
+		"build-esm": "BABEL_ENV=esm babel src --out-dir esm",
+		"grimm-example": "node example/index.js"
 	},
 	"repository": {
 		"type": "git",
@@ -30,15 +31,15 @@
 	},
 	"homepage": "https://github.com/emmaBocuma/markov-text-generator#readme",
 	"devDependencies": {
-		"@babel/cli": "^7.8.3",
-		"@babel/core": "^7.8.3",
-		"@babel/preset-env": "^7.8.3",
-		"@babel/register": "^7.8.3",
+		"@babel/cli": "^7.8.4",
+		"@babel/core": "^7.9.6",
+		"@babel/preset-env": "^7.9.6",
+		"@babel/register": "^7.9.0",
 		"chai": "^4.2.0",
-		"mocha": "^5.2.0",
+		"mocha": "^7.1.2",
 		"prettier": "^1.19.1"
 	},
 	"dependencies": {
-		"seedrandom": "^2.4.4"
+		"seedrandom": "^3.0.5"
 	}
 }

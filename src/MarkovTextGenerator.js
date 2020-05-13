@@ -95,7 +95,7 @@ class MarkovTextGenerator {
 	 * @param {string} seed
 	 */
 	setSeed(seed) {
-		Math.seedrandom(seed);
+		seedrandom(seed, { global: true });
 	}
 }
 

@@ -8,6 +8,12 @@ See this [Medium article](https://medium.com/@emmabocuma/using-markov-to-tweet-l
 
     npm install markov-text-generator
 
+## Example
+
+The following script will log out three paragraphs of Markov generated text using Grimms' Fairy Tales as the training text. Three text files of Grimm training text are available - the 'quality' of text output, and length of time to build, both differ depending on size of training text used.
+
+    npm run grimm-example
+
 ## Implementation Example
 
     
