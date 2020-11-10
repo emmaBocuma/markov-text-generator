@@ -3,7 +3,7 @@ const path = require("path");
 const MarkovTextGenerator = require("../commonjs/MarkovTextGenerator").default;
 const { performance } = require("perf_hooks");
 
-const trainingFilePath = path.resolve(__dirname, "./Grimm_tales_med.txt");
+const trainingFilePath = path.resolve(__dirname, "./Grimm_tales_tiny.txt");
 
 const trainingText = fs.readFileSync(trainingFilePath, "utf-8");
 
@@ -18,15 +18,15 @@ time1 = performance.now();
 console.log("Building data took: " + Math.round(time1 - time0) + "ms");
 
 const interval = setInterval(() => {
-	time0 = performance.now();
-	const generatedText = markov.generateText(70);
-	time1 = performance.now();
+  time0 = performance.now();
+  const generatedText = markov.generateText(70);
+  time1 = performance.now();
 
-	console.log("\nGenerated:", generatedText);
-	console.log("Generating took: " + Math.round(time1 - time0) + "ms");
-	console.log("\n----------");
+  console.log("\nGenerated:", generatedText);
+  console.log("Generating took: " + Math.round(time1 - time0) + "ms");
+  console.log("\n----------");
 }, 1000);
 
 setTimeout(() => {
-	clearInterval(interval);
+  clearInterval(interval);
 }, 4000);

@@ -12,7 +12,7 @@ See this [Medium article](https://medium.com/@emmabocuma/using-markov-to-tweet-l
 
 The following script will log out three paragraphs of Markov generated text using Grimms' Fairy Tales as the training text. Three text files of Grimm training text are available - the 'quality' of text output, and length of time to build, both differ depending on size of training text used.
 
-    npm run grimm-example
+    npm run example
 
 ## Implementation Example
 
