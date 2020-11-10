@@ -1,6 +1,6 @@
 {
   "name": "markov-text-generator",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "commonjs/MarkovTextGenerator.js",
   "module": "esm/MarkovTextGenerator.js",
