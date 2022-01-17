@@ -71,7 +71,7 @@ class TextChain {
   _nGramBeginsSentence(nGramKey) {
     const firstChar = nGramKey.substring(0, 1);
     const lastChar = nGramKey.substring(nGramKey.length - 1, nGramKey.length);
-    const regexUpper = /[A-Z]/;
+    var regexUpper = /[A-Z|А-Я]/;
     const regexPunctuation = /[!-.:-@[-`{-~‘-”]/;
 
     if (!firstChar.match(regexUpper) || lastChar.match(regexPunctuation)) {
